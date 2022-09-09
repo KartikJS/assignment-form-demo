@@ -13,14 +13,16 @@ const options = [
   { id: 8, text: "Slider", value: "slider" },
 ];
 
+
+
 const Container = () => {
   let data = {};
   const [select, setSelect] = useState(false);
 
-  const [serviceList, setServiceList] = useState([
+  const [answerList, setAnswerList] = useState([
     { enteredOption: "", min: "", max: "" },
   ]);
-
+  
   let optionNumber = 1;
 
   const questionInputRef = useRef();
@@ -28,12 +30,9 @@ const Container = () => {
   const formRef = useRef();
 
 
-
-
   const confirmHandler = (e) => {
     e.preventDefault();
   };
-
 
 
   const selectHandler = () => {
@@ -45,26 +44,20 @@ const Container = () => {
   };
 
 
-
-
   const addOptionHandler = () => {
-    if (serviceList.length < 4) {
-      setServiceList([...serviceList, { enteredOption: "", min: "", max: "" }]);
+    if (answerList.length < 4) {
+      setAnswerList([...answerList, { enteredOption: "", min: "", max: "" }]);
     }
   };
 
 
-
-
   const removeOptionHandler = (index) => {
-    const optionList = [...serviceList];
+    const optionList = [...answerList];
     optionList.splice(index, 1);
-    setServiceList(optionList);
+    setAnswerList(optionList);
   };
 
-
-
-
+  
   const submitHandler = () => {
     const enteredQuestion = questionInputRef.current.value;
     const answerType = answerTypeInputRef.current.value;
@@ -72,7 +65,7 @@ const Container = () => {
     data = {
       enteredQuestion,
       answerType,
-      serviceList,
+      answerList,
     };
     console.log(data);
 
@@ -87,22 +80,19 @@ const Container = () => {
   };
 
 
-
-
-
-  const handleServiceChange = (e, index) => {
+  const handleAnswerListChange = (e, index) => {
     const { name, value } = e.target;
-    const list = [...serviceList];
+    const list = [...answerList];
     list[index][name] = value;
-    setServiceList(list);
+    setAnswerList(list);
   };
+
+  
   const preventMinus = (e) => {
     if (e.code === "Minus") {
       e.preventDefault();
     }
   };
-
-
 
 
   return (
@@ -137,7 +127,7 @@ const Container = () => {
             ))}
           </select>
           {select &&
-            serviceList.map((singleService, index) => (
+            answerList.map((singleAnswer, index) => (
               <div
                 key={index}
                 className="d-flex flex-column bg-light py-10 mt-2 "
@@ -150,8 +140,8 @@ const Container = () => {
                     type="text"
                     placeholder="Placeholder"
                     className="form-control w-50 flex-fill"
-                    value={singleService.service}
-                    onChange={(e) => handleServiceChange(e, index)}
+                    value={singleAnswer.enteredOption}
+                    onChange={(e) => handleAnswerListChange(e, index)}
                   />
                   <input
                     id="min"
@@ -160,9 +150,9 @@ const Container = () => {
                     type="number"
                     placeholder="Min"
                     className="form-control "
-                    value={singleService.service}
+                    value={singleAnswer.min}
                     onKeyPress={preventMinus}
-                    onChange={(e) => handleServiceChange(e, index)}
+                    onChange={(e) => handleAnswerListChange(e, index)}
                   />
                   <input
                     id="max"
@@ -173,10 +163,10 @@ const Container = () => {
                     onKeyPress={preventMinus}
                     className="form-control "
                     // ref={addToRefs}
-                    value={singleService.service}
-                    onChange={(e) => handleServiceChange(e, index)}
+                    value={singleAnswer.max}
+                    onChange={(e) => handleAnswerListChange(e, index)}
                   />
-                  {optionNumber !== 1 && serviceList.length > 1 && (
+                  {optionNumber !== 1 && answerList.length > 1 && (
                     <button
                       type="button"
                       className="btn btn-dark"
