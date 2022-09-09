@@ -161,8 +161,7 @@ const Container = () => {
                     type="number"
                     placeholder="Max"
                     onKeyPress={preventMinus}
-                    className="form-control "
-                    // ref={addToRefs}
+                    className="form-control"
                     value={singleAnswer.max}
                     onChange={(e) => handleAnswerListChange(e, index)}
                   />
