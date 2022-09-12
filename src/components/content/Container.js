@@ -39,7 +39,7 @@ const Container = () => {
       setSelect(false);
     } else {
       setAnswerList([{ enteredOption: "", min: "", max: "" }]);
-
+      setSubmit(false);
       setSelect(true);
     }
   };
