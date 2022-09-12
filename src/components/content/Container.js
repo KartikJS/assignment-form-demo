@@ -13,51 +13,51 @@ const options = [
   { id: 8, text: "Slider", value: "slider" },
 ];
 
-
-
 const Container = () => {
   let data = {};
   const [select, setSelect] = useState(false);
+  const [submit, setSubmit] = useState(false);
 
   const [answerList, setAnswerList] = useState([
     { enteredOption: "", min: "", max: "" },
   ]);
-  
+
   let optionNumber = 1;
 
   const questionInputRef = useRef();
   const answerTypeInputRef = useRef();
   const formRef = useRef();
 
-
   const confirmHandler = (e) => {
     e.preventDefault();
   };
-
 
   const selectHandler = () => {
     if (answerTypeInputRef.current.value === "none") {
       setSelect(false);
     } else {
+      setAnswerList([{ enteredOption: "", min: "", max: "" }]);
+
       setSelect(true);
     }
   };
 
-
   const addOptionHandler = () => {
-    if (answerList.length < 4) {
-      setAnswerList([...answerList, { enteredOption: "", min: "", max: "" }]);
-    }
+    // if (answerList.length < 4) {
+    //   setAnswerList([...answerList, { enteredOption: "", min: "", max: "" }]);
+    // }
+    setAnswerList([...answerList, { enteredOption: "", min: "", max: "" }]);
   };
-
 
   const removeOptionHandler = (index) => {
     const optionList = [...answerList];
+
     optionList.splice(index, 1);
+
     setAnswerList(optionList);
+    setSubmit(false);
   };
 
-  
   const submitHandler = () => {
     const enteredQuestion = questionInputRef.current.value;
     const answerType = answerTypeInputRef.current.value;
@@ -76,32 +76,36 @@ const Container = () => {
       setSelect(false);
 
       formRef.current.reset();
+      setAnswerList([{ enteredOption: "", min: "", max: "" }]);
     }
   };
 
-
   const handleAnswerListChange = (e, index) => {
+    if (questionInputRef.current.value !== "" && e.target.value !== "") {
+      setSubmit(true);
+    } else {
+      setSubmit(false);
+    }
+
     const { name, value } = e.target;
     const list = [...answerList];
     list[index][name] = value;
     setAnswerList(list);
   };
-
-  
   const preventMinus = (e) => {
     if (e.code === "Minus") {
       e.preventDefault();
     }
   };
 
-
   return (
     <React.Fragment>
       <ToastContainer autoClose={2000} />
       <form
-        className="d-flex flex-column justify-content-center container h-75 w-75 bg-warning border aligns-items-center"
+        className="d-flex flex-column vh-auto container p-3 h-auto w-75 bg-warning border "
         onSubmit={confirmHandler}
-        ref={formRef}>
+        ref={formRef}
+      >
         <div>
           <div className="input-group mb-3 ">
             <input
@@ -128,12 +132,9 @@ const Container = () => {
           </select>
           {select &&
             answerList.map((singleAnswer, index) => (
-              <div
-                key={index}
-                className="d-flex flex-column bg-light py-10 mt-2 "
-              >
+              <div key={index} className="d-flex flex-column bg-light  mt-2 ">
                 <div className="m-2">Option {optionNumber++}</div>
-                <div className="input-group d-flex container h-100 w-75 p-50 mb-2">
+                <div className="input-group d-flex container h-100 w-75 mb-2">
                   <input
                     id="enteredOption"
                     name="enteredOption"
@@ -161,15 +162,15 @@ const Container = () => {
                     type="number"
                     placeholder="Max"
                     onKeyPress={preventMinus}
-                    className="form-control"
+                    className="form-control "
                     value={singleAnswer.max}
                     onChange={(e) => handleAnswerListChange(e, index)}
                   />
-                  {optionNumber !== 1 && answerList.length > 1 && (
+                  {answerList.length > 1 && (
                     <button
                       type="button"
                       className="btn btn-dark"
-                      onClick={removeOptionHandler}
+                      onClick={() => removeOptionHandler(index)}
                     >
                       -
                     </button>
@@ -183,7 +184,7 @@ const Container = () => {
             type="submit"
             className="btn btn-dark "
             onClick={submitHandler}
-            disabled={!select}
+            disabled={!submit}
           >
             Submit
           </button>
