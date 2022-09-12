@@ -24,10 +24,12 @@ const Container = () => {
 
   let optionNumber = 1;
 
+  
   const questionInputRef = useRef();
   const answerTypeInputRef = useRef();
   const formRef = useRef();
 
+  
   const confirmHandler = (e) => {
     e.preventDefault();
   };
@@ -42,6 +44,7 @@ const Container = () => {
     }
   };
 
+  
   const addOptionHandler = () => {
     // if (answerList.length < 4) {
     //   setAnswerList([...answerList, { enteredOption: "", min: "", max: "" }]);
@@ -49,6 +52,7 @@ const Container = () => {
     setAnswerList([...answerList, { enteredOption: "", min: "", max: "" }]);
   };
 
+  
   const removeOptionHandler = (index) => {
     const optionList = [...answerList];
 
@@ -58,6 +62,7 @@ const Container = () => {
     setSubmit(false);
   };
 
+  
   const submitHandler = () => {
     const enteredQuestion = questionInputRef.current.value;
     const answerType = answerTypeInputRef.current.value;
@@ -80,6 +85,7 @@ const Container = () => {
     }
   };
 
+  
   const handleAnswerListChange = (e, index) => {
     if (questionInputRef.current.value !== "" && e.target.value !== "") {
       setSubmit(true);
@@ -87,11 +93,14 @@ const Container = () => {
       setSubmit(false);
     }
 
-    const { name, value } = e.target;
+    
+  const { name, value } = e.target;
     const list = [...answerList];
     list[index][name] = value;
     setAnswerList(list);
   };
+  
+  
   const preventMinus = (e) => {
     if (e.code === "Minus") {
       e.preventDefault();
